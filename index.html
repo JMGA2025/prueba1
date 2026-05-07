@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Sopa de Letras 3D - Aula Ateca</title>
+    <!-- Cargamos la última versión estable de A-Frame -->
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script>
+      // 1. CONFIGURACIÓN DE TÉRMINOS DEFINITIVOS
+      const TERMINOS = ["ZAT", "SAN", "DC-", "DC+", "E7016", "E6013", "BASICO", "RUTILO", "SMAW", "111", "AC", "WPS"];
+      let seleccionActual = "";
+      let objetosSeleccionados = [];
+      let encontrados = 0;
+
+      // Componente principal del juego
+      AFRAME.registerComponent('gestor-sopa', {
+        init: function () {
+          const el = this.el;
+          const letrasTotales = [];
+          
+          // Descomponer términos en letras individuales
+          TERMINOS.forEach(t => {
+            t.split('').forEach(letra => letrasTotales.push(letra));
+          });
+
+          // Añadir caracteres de relleno para dificultar la búsqueda
+          const relleno = "XBYKJHMLWQVR0982";
+          for(let i=0; i<35; i++) {
+            letrasTotales.push(relleno.charAt(Math.floor(Math.random() * relleno.length)));
+          }
+
+          // Crear cada pieza en el espacio 3D
+          letrasTotales.forEach((letra) => {
+            const entidad = document.createElement('a-entity');
+            
+            // Dispersión en el aula (aprox 5x5 metros)
+            const x = (Math.random() - 0.5) * 5;
+            const y = Math.random() * 1.5 + 0.8; // Altura cómoda para los ojos
+            const z = (Math.random() - 0.5) * 5;
+
+            entidad.setAttribute('position', {x: x, y: y, z: z});
+            entidad.classList.add('interactuable');
+
+            // LA PIEZA: Cilindro con aspecto de "Azul Industrial"
+            const placa = document.createElement('a-cylinder');
+            placa.setAttribute('rotation', '90 0 0');
+            placa.setAttribute('radius', '0.15');
+            placa.setAttribute('height', '0.04');
+            placa.setAttribute('material', {
+              color: '#2c3e50', // Azul Petróleo / Industrial
+              metalness: 0.8,
+              roughness: 0.2
+            });
+
+            // EL TEXTO: Letra o número con relieve
+            const texto = document.createElement('a-text');
+            texto.setAttribute('value', letra);
+            texto.setAttribute('align', 'center');
+            texto.setAttribute('width', 4);
+            texto.setAttribute('position', '0 0 0.03'); // Un poco por delante de la placa
+            texto.setAttribute('color', '#FFFFFF');
+            texto.setAttribute('font', 'exo2bold');
+
+            entidad.appendChild(placa);
+            entidad.appendChild(texto);
+            
+            // Animación de flotado suave para dar vida al entorno
+            entidad.setAttribute('animation', {
+              property: 'position',
+              dir: 'alternate',
+              dur: 2000 + Math.random() * 2000,
+              easing: 'easeInOutSine',
+              loop: true,
+              to: `${x} ${y + 0.15} ${z}`
+            });
+
+            // Evento de selección (Click / Trigger)
+            entidad.addEventListener('click', () => this.logicaClick(entidad, placa, texto));
+            el.appendChild(entidad);
+          });
+        },
+
+        logicaClick: function(entidad, placa, texto) {
+          const letra = texto.getAttribute('value');
+          const colorPlaca = placa.getAttribute('material').color;
+          
+          if (colorPlaca === '#27ae60') return; // Bloquear si ya es correcta
+
+          if (colorPlaca === '#f1c40f') { // DESELECCIONAR si se vuelve a tocar
+            placa.setAttribute('material', 'color', '#2c3e50');
+            const index = objetosSeleccionados.indexOf(entidad);
+            if (index > -1) {
+              objetosSeleccionados.splice(index, 1);
+              seleccionActual = objetosSeleccionados.map(o => o.querySelector('a-text').getAttribute('value')).join('');
+            }
+          } else { // SELECCIONAR
+            placa.setAttribute('material', 'color', '#f1c40f'); // Amarillo
+            objetosSeleccionados.push(entidad);
+            seleccionActual += letra;
+          }
+
+          // Actualizar pizarra para la clase
+          document.querySelector('#texto-pizarra').setAttribute('value', `FORMANDO: ${seleccionActual}`);
+
+          // Comprobar si hemos formado un término válido
+          if (TERMINOS.includes(seleccionActual)) {
+            this.confirmarAcierto();
+          }
+        },
+
+        confirmarAcierto: function() {
+          objetosSeleccionados.forEach(o => {
+            o.querySelector('a-cylinder').setAttribute('material', 'color', '#27ae60'); // Verde
+            o.setAttribute('animation__win', {property: 'scale', to: '1.4 1.4 1.4', dur: 200, dir: 'alternate', loop: 2});
+          });
+          encontrados++;
+          document.querySelector('#contador').setAttribute('value', `ENCONTRADOS: ${encontrados} / ${TERMINOS.length}`);
+          
+          // Limpiar buffer para la siguiente palabra
+          seleccionActual = "";
+          objetosSeleccionados = [];
+          setTimeout(() => {
+            document.querySelector('#texto-pizarra').setAttribute('value', 'FORMANDO: ...');
+          }, 1000);
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <!-- Escena configurada para Realidad Mixta (Passthrough) -->
+    <a-scene xr-mode-ui="enabled: true" gestor-sopa>
+      
+      <!-- Fondo transparente para ver el Aula real -->
+      <a-sky opacity="0"></a-sky>
+
+      <!-- Cámara del alumno con puntero verde -->
+      <a-camera>
+        <a-cursor raycaster="objects: .interactuable" color="#2ecc71" fuse="false"></a-cursor>
+      </a-camera>
+
+      <!-- PANTALLA DE CONTROL (Pizarra Digital) -->
+      <a-entity position="0 2.8 -3">
+        <a-plane color="#1a1a1a" width="4" height="1.2" opacity="0.8" material="metalness: 0.5"></a-plane>
+        <a-text id="texto-pizarra" value="FORMANDO: ..." align="center" position="0 0.2 0.1" width="5" color="#f1c40f"></a-text>
+        <a-text id="contador" value="ENCONTRADOS: 0 / 12" align="center" position="0 -0.3 0.1" width="4" color="#FFFFFF"></a-text>
+      </a-entity>
+
+      <!-- BOTÓN DE REINICIO EN EL SUELO -->
+      <a-entity position="1.5 0.05 -1.5" onclick="location.reload()">
+        <a-box color="#c0392b" width="0.6" height="0.1" depth="0.4" material="metalness: 0.7"></a-box>
+        <a-text value="REINICIAR JUEGO" align="center" position="0 0.12 0" rotation="-90 0 0" width="3"></a-text>
+      </a-entity>
+
+    </a-scene>
+  </body>
+</html>
