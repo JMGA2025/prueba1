@@ -67,22 +67,22 @@
   <!-- NUBE DE PALABRAS: Ahora orbitan en un radio fijo (z) rotando sobre el eje Y -->
   <a-entity id="nube-palabras" position="0 1.6 0">
     <a-entity animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 18000; easing: linear">
-      <a-text value="Bienvenido/a" class="interactable" palabra-interactiva position="0 0.2 -1.8" color="#ffffff" width="3.2" align="center" rotation="0 0 0"></a-text>
+      <a-text value="¡Bienvenido/a!" class="interactable" palabra-interactiva position="0 0.2 -1.8" color="#ffffff" width="3.2" align="center" geometry="primitive: plane; width: 1.5; height: 0.5" material="visible: false"></a-text>
     </a-entity>
     <a-entity animation="property: rotation; from: 0 45 0; to: 0 -315 0; loop: true; dur: 22000; easing: linear">
-      <a-text value="Welcome" class="interactable" palabra-interactiva position="0 0.5 -1.6" color="#f0f0f0" width="2.6" align="center" rotation="0 0 0"></a-text>
+      <a-text value="¡Welcome!" class="interactable" palabra-interactiva position="0 0.5 -1.6" color="#f0f0f0" width="2.6" align="center" geometry="primitive: plane; width: 1.2; height: 0.5" material="visible: false"></a-text>
     </a-entity>
     <a-entity animation="property: rotation; from: 0 90 0; to: 0 450 0; loop: true; dur: 25000; easing: linear">
-      <a-text value="Bienvenue" class="interactable" palabra-interactiva position="0 -0.2 -1.7" color="#ffffff" width="2.4" align="center" rotation="0 0 0"></a-text>
+      <a-text value="¡Bienvenue!" class="interactable" palabra-interactiva position="0 -0.2 -1.7" color="#ffffff" width="2.4" align="center" geometry="primitive: plane; width: 1.2; height: 0.5" material="visible: false"></a-text>
     </a-entity>
     <a-entity animation="property: rotation; from: 0 135 0; to: 0 -225 0; loop: true; dur: 20000; easing: linear">
-      <a-text value="Willkommen" class="interactable" palabra-interactiva position="0 0.8 -1.5" color="#eeeeee" width="2.1" align="center" rotation="0 0 0"></a-text>
+      <a-text value="¡Willkommen!" class="interactable" palabra-interactiva position="0 0.8 -1.5" color="#eeeeee" width="2.1" align="center" geometry="primitive: plane; width: 1.0; height: 0.5" material="visible: false"></a-text>
     </a-entity>
     <a-entity animation="property: rotation; from: 0 180 0; to: 0 540 0; loop: true; dur: 28000; easing: linear">
-      <a-text value="Benvenuto/a" class="interactable" palabra-interactiva position="0 -0.5 -1.6" color="#f5f5f5" width="2.3" align="center" rotation="0 0 0"></a-text>
+      <a-text value="¡Benvenuto/a!" class="interactable" palabra-interactiva position="0 -0.5 -1.6" color="#f5f5f5" width="2.3" align="center" geometry="primitive: plane; width: 1.2; height: 0.5" material="visible: false"></a-text>
     </a-entity>
     <a-entity animation="property: rotation; from: 0 225 0; to: 0 -135 0; loop: true; dur: 19000; easing: linear">
-      <a-text value="Bem-vindo/a" class="interactable" palabra-interactiva position="0 0.4 -1.9" color="#ffffff" width="2.2" align="center" rotation="0 0 0"></a-text>
+      <a-text value="¡Bem-vindo/a!" class="interactable" palabra-interactiva position="0 0.4 -1.9" color="#ffffff" width="2.2" align="center" geometry="primitive: plane; width: 1.2; height: 0.5" material="visible: false"></a-text>
     </a-entity>
   </a-entity>
 
@@ -117,11 +117,11 @@
     <a-plane width="2.6" height="2.4" color="#000000" opacity="0.6" material="shader:flat"></a-plane>
     <a-plane width="2.65" height="2.45" color="#4455aa" material="shader:flat; emissive:#4455aa; emissiveIntensity:0.5" position="0 0 -0.01"></a-plane>
     
-    <!-- Título reubicado -->
+    <!-- Título reubicado más arriba para que no solape -->
     <a-text value="¿QUE ENCONTRARAS AQUI?" align="center" color="#f1c40f" width="3.0" position="0 0.95 0.01" font="exo2bold"></a-text>
     
-    <!-- Texto principal separado del título y con más interlineado -->
-    <a-text value="Disponemos de tecnologia punta para\ntu aprendizaje:\n\n* Simuladores de Soldeo\n\n* Visores de Realidad Virtual (VR)\n\n* Realidad Mixta (XR)\n\n* Un potente escaner 3D\n\n... ¡Y esperamos que pronto\nalguna cosa mas!" align="left" color="#ffffff" width="2.4" position="-1.1 0.05 0.01" line-height="60"></a-text>
+    <!-- Texto principal con exclamaciones claras y bajado un poco -->
+    <a-text value="Disponemos de tecnologia punta para\ntu aprendizaje:\n\n* Simuladores de Soldeo\n\n* Visores de Realidad Virtual (VR)\n\n* Realidad Mixta (XR)\n\n* Un potente escaner 3D\n\n¡...Y esperamos que pronto\n tengamos alguna cosa mas!" align="left" color="#ffffff" width="2.4" position="-1.1 -0.05 0.01" line-height="55"></a-text>
   </a-entity>
 
   <!-- Cámara y Controles VR (Corrección del raycaster) -->
