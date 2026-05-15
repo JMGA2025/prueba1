@@ -1,10 +1,14 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bienvenido - Aula ATECA</title>
   
+  <!-- Script principal de A-Frame -->
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  
+  <!-- Fuentes elegantes -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
   
   <style>
@@ -127,13 +131,14 @@
   <button id="btn-entrar" onclick="iniciar()">ENTRAR</button>
 </div>
 
-<!-- EL AUDIO FUERA DE A-ASSETS PARA QUE NO BLOQUEE LA PANTALLA -->
-<audio id="musica-fondo" src="./ATECA1.mp3" preload="auto" loop></audio>
-
 <a-scene renderer="alpha:false;antialias:true;" background="color:#000005" fog="type: exponential; color: #000010; density: 0.04" webxr="optionalFeatures: hit-test,local-floor,passthrough;">
   
+  <!-- AUDIO FUERA DE ASSETS PARA NO BLOQUEAR LA CARGA -->
+  <audio id="musica-fondo" src="./ATECA1.mp3" loop></audio>
+
   <a-sky color="#000005"></a-sky>
   
+  <!-- Suelo sutil -->
   <a-cylinder radius="30" height="0.01" position="0 0 0" color="#1a1a3a" opacity="0.1" material="shader: flat;"></a-cylinder>
   <a-ring radius-inner="2" radius-outer="2.05" position="0 0.01 0" rotation="-90 0 0" color="#4455aa" opacity="0.3"></a-ring>
   
@@ -143,39 +148,16 @@
   <a-entity id="estrellas"></a-entity>
   <a-entity id="particulas-magicas"></a-entity>
 
+  <!-- NUBE DE PALABRAS -->
   <a-entity id="nube-palabras">
     <a-text value="Bienvenido/a"   class="interactable" palabra-interactiva position=" 0.0  1.7 -1.8" color="#ffffff" width="3.2" align="center" animation="property:rotation; from:0 0 0;    to:12 360 8;   loop:true; dur:18000; easing:linear"></a-text>
     <a-text value="Welcome"        class="interactable" palabra-interactiva position=" 1.1  2.1 -1.4" color="#f0f0f0" width="2.6" align="center" animation="property:rotation; from:5 0 -8;   to:5 -360 -8;  loop:true; dur:22000; easing:linear"></a-text>
     <a-text value="Bienvenue"      class="interactable" palabra-interactiva position="-1.2  1.9 -1.3" color="#ffffff" width="2.4" align="center" animation="property:rotation; from:0 15 0;   to:360 15 0;   loop:true; dur:25000; easing:linear"></a-text>
     <a-text value="Willkommen"     class="interactable" palabra-interactiva position=" 0.7  2.6 -1.5" color="#eeeeee" width="2.1" align="center" animation="property:rotation; from:8 0 -5;   to:8 360 -5;   loop:true; dur:20000; easing:linear"></a-text>
     <a-text value="Benvenuto/a"    class="interactable" palabra-interactiva position="-0.8  1.1 -1.6" color="#f5f5f5" width="2.3" align="center" animation="property:rotation; from:0 0 10;   to:360 0 10;   loop:true; dur:28000; easing:linear"></a-text>
-    <a-text value="Bem-vindo/a"    class="interactable" palabra-interactiva position=" 0.3  2.9 -1.4" color="#ffffff" width="2.2" align="center" animation="property:rotation; from:-5 0 0;   to:-5 -360 0;  loop:true; dur:19000; easing:linear"></a-text>
-    <a-text value="أهلاً وسهلاً"  class="interactable" palabra-interactiva position="-0.4  2.3 -1.7" color="#f8f8f8" width="2.5" align="center" animation="property:rotation; from:0 20 0;   to:360 20 0;   loop:true; dur:23000; easing:linear"></a-text>
-    <a-text value="欢迎"           class="interactable" palabra-interactiva position=" 1.4  1.5 -1.2" color="#ffffff" width="3.8" align="center" animation="property:rotation; from:10 0 0;   to:10 360 0;   loop:true; dur:17000; easing:linear"></a-text>
-    <a-text value="ようこそ"       class="interactable" palabra-interactiva position="-1.4  2.0 -1.1" color="#efefef" width="2.7" align="center" animation="property:rotation; from:0 0 -10;  to:360 0 -10;  loop:true; dur:21000; easing:linear"></a-text>
-    <a-text value="환영합니다"     class="interactable" palabra-interactiva position=" 0.5  1.2 -1.8" color="#f0f0f0" width="2.1" align="center" animation="property:rotation; from:-8 0 5;   to:-8 -360 5;  loop:true; dur:26000; easing:linear"></a-text>
-    <a-text value="Добро пожаловать" class="interactable" palabra-interactiva position="-1.0 2.8 -1.3" color="#ffffff" width="1.7" align="center" animation="property:rotation; from:0 -15 0;  to:360 -15 0;  loop:true; dur:30000; easing:linear"></a-text>
-    <a-text value="Welkom"         class="interactable" palabra-interactiva position=" 1.3  2.4 -1.3" color="#f8f8f8" width="2.7" align="center" animation="property:rotation; from:12 0 0;   to:12 360 0;   loop:true; dur:16000; easing:linear"></a-text>
-    <a-text value="Välkommen"      class="interactable" palabra-interactiva position="-0.3  3.1 -1.5" color="#ffffff" width="2.1" align="center" animation="property:rotation; from:0 5 12;   to:360 5 12;   loop:true; dur:24000; easing:linear"></a-text>
-    <a-text value="Witamy"         class="interactable" palabra-interactiva position=" 1.0  1.8 -1.6" color="#eeeeee" width="2.7" align="center" animation="property:rotation; from:-6 0 -5;  to:-6 -360 -5; loop:true; dur:27000; easing:linear"></a-text>
-    <a-text value="Hoş geldiniz"   class="interactable" palabra-interactiva position="-1.3  1.4 -1.4" color="#f5f5f5" width="2.0" align="center" animation="property:rotation; from:0 0 -12;  to:360 0 -12;  loop:true; dur:22000; easing:linear"></a-text>
-    <a-text value="स्वागत है"      class="interactable" palabra-interactiva position=" 0.2  0.9 -1.7" color="#ffffff" width="2.4" align="center" animation="property:rotation; from:6 0 0;    to:6 360 0;    loop:true; dur:19000; easing:linear"></a-text>
-    <a-text value="Καλώς ήρθες"   class="interactable" palabra-interactiva position="-1.0  1.6 -1.5" color="#f0f0f0" width="2.1" align="center" animation="property:rotation; from:0 -8 8;   to:360 -8 8;   loop:true; dur:31000; easing:linear"></a-text>
-    <a-text value="ברוך הבא"      class="interactable" palabra-interactiva position=" 1.2  2.7 -1.4" color="#ffffff" width="2.3" align="center" animation="property:rotation; from:-5 0 -5;  to:-5 -360 -5; loop:true; dur:20000; easing:linear"></a-text>
-    <a-text value="Ongi etorri"    class="interactable" palabra-interactiva position="-1.2  2.5 -1.2" color="#f8f8f8" width="2.0" align="center" animation="property:rotation; from:0 0 10;   to:360 0 10;   loop:true; dur:23000; easing:linear"></a-text>
-    <a-text value="Benvingut/da"   class="interactable" palabra-interactiva position=" 0.4  3.0 -1.4" color="#eeeeee" width="1.9" align="center" animation="property:rotation; from:10 5 0;   to:10 -355 0;  loop:true; dur:18000; easing:linear"></a-text>
-    <a-text value="Benvido/a"      class="interactable" palabra-interactiva position="-0.6  1.3 -1.6" color="#ffffff" width="2.2" align="center" animation="property:rotation; from:0 25 0;   to:360 25 0;   loop:true; dur:25000; easing:linear"></a-text>
-    <a-text value="Bun venit"      class="interactable" palabra-interactiva position=" 1.0  3.2 -1.3" color="#f5f5f5" width="2.2" align="center" animation="property:rotation; from:-10 0 0;  to:-10 360 0;  loop:true; dur:21000; easing:linear"></a-text>
-    <a-text value="Vítejte"        class="interactable" palabra-interactiva position="-1.5  1.8 -1.0" color="#ffffff" width="2.6" align="center" animation="property:rotation; from:0 -5 -10; to:360 -5 -10; loop:true; dur:28000; easing:linear"></a-text>
-    <a-text value="Üdvözöljük"     class="interactable" palabra-interactiva position=" 0.7  1.0 -1.7" color="#f0f0f0" width="2.1" align="center" animation="property:rotation; from:7 0 7;    to:7 360 7;    loop:true; dur:17000; easing:linear"></a-text>
-    <a-text value="Ласкаво просимо" class="interactable" palabra-interactiva position="-0.7 3.3 -1.4" color="#ffffff" width="1.6" align="center" animation="property:rotation; from:0 0 -12;  to:360 0 -12;  loop:true; dur:33000; easing:linear"></a-text>
-    <a-text value="Selamat datang"  class="interactable" palabra-interactiva position=" 1.4  2.0 -1.1" color="#f8f8f8" width="1.8" align="center" animation="property:rotation; from:-6 0 6;   to:-6 -360 6;  loop:true; dur:22000; easing:linear"></a-text>
-    <a-text value="Karibu"         class="interactable" palabra-interactiva position="-0.2  3.4 -1.5" color="#ffffff" width="3.0" align="center" animation="property:rotation; from:0 10 -8;  to:360 10 -8;  loop:true; dur:19000; easing:linear"></a-text>
-    <a-text value="خوش آمدید"     class="interactable" palabra-interactiva position=" 1.1  1.3 -1.5" color="#eeeeee" width="2.2" align="center" animation="property:rotation; from:5 -15 0;  to:5 -375 0;   loop:true; dur:26000; easing:linear"></a-text>
-    <a-text value="Chào mừng"      class="interactable" palabra-interactiva position="-1.1  1.1 -1.4" color="#f5f5f5" width="2.2" align="center" animation="property:rotation; from:0 0 15;   to:360 0 15;   loop:true; dur:24000; easing:linear"></a-text>
-    <a-text value="ยินดีต้อนรับ"   class="interactable" palabra-interactiva position=" 0.0  1.0 -1.9" color="#ffffff" width="2.4" align="center" animation="property:rotation; from:-8 0 -8;  to:-8 360 -8;  loop:true; dur:29000; easing:linear"></a-text>
   </a-entity>
 
+  <!-- CARTEL PRINCIPAL AULA ATECA -->
   <a-entity id="aula-ateca" position="0 1.8 -30" visible="false">
     <a-plane width="5.4" height="2.2" color="#000000" opacity="0.6" material="shader:flat" position="0 0 -0.06"></a-plane>
     <a-light type="point" color="#f1c40f" intensity="1" distance="6" position="0 0 0.5"></a-light>
@@ -186,29 +168,36 @@
     <a-text value="ATECA" align="center" color="#f1c40f" width="10.5" position="0 -0.30 0" font="exo2bold" material="shader:flat; emissive:#f1c40f; emissiveIntensity:0.5"></a-text>
   </a-entity>
 
-  <a-entity id="panel-info" position="0 1.8 -2.8" visible="false" scale="0 0 0">
-    <!-- Fondo de cristal oscuro -->
-    <a-plane width="4.5" height="2.8" color="#000011" opacity="0.8" material="shader:flat" position="0 0 -0.05"></a-plane>
-    <!-- Borde sutil -->
-    <a-plane width="4.54" height="2.84" color="#4455aa" opacity="0.3" material="shader:flat" position="0 0 -0.06"></a-plane>
+  <!-- PANEL 1: INFORMACIÓN DEL AULA (Izquierda) -->
+  <a-entity id="panel-info" position="-1.5 1.6 -2.6" rotation="0 15 0" scale="0.01 0.01 0.01" visible="false">
+    <a-plane width="2.6" height="2.4" color="#000000" opacity="0.6" material="shader:flat"></a-plane>
+    <a-plane width="2.65" height="2.45" color="#f1c40f" material="shader:flat; emissive:#f1c40f; emissiveIntensity:0.5" position="0 0 -0.01"></a-plane>
+    
+    <!-- AQUÍ SE HA INTEGRADO TU LOGO EXACTAMENTE COMO PEDISTE -->
+    <a-image src="./LOGO.jpg" position="0 0.8 0.01" width="1.2" height="0.6"></a-image>
 
-    <!-- AQUÍ IRA TU LOGOTIPO: Cambia logo-centro.png por el nombre de tu archivo -->
-    <a-image src="./logo-centro.png" position="0 0.9 0" width="1.2" height="0.6"></a-image>
-
-    <!-- Texto Explicativo -->
-    <a-text value="¿Que son las Aulas ATECA?\n\nSon espacios destinados a impulsar la innovacion,\nla digitalizacion y el emprendimiento dentro de la\nFormacion Profesional.\n\nAqui, el aprendizaje se conecta con la realidad del\nsector productivo, usando las ultimas tecnologias.\n\n¡Adentrate y disfruta de esta experiencia inmersiva!" 
-            align="center" color="#e0e0e0" width="3.8" position="0 -0.3 0" wrap-count="50" line-height="60">
-    </a-text>
+    <a-text value="NUESTRA AULA ATECA" align="center" color="#ffffff" width="3.0" position="0 0.3 0.01" font="exo2bold"></a-text>
+    <a-text value="Este espacio nace como una apuesta por la\ninnovacion y la digitalizacion. \n\nUn entorno disenado para transformar la\nmanera en la que aprendemos y creamos, \nfusionando la tecnologia con la creatividad.\n\n¡Disfruta de la experiencia inmersiva!" align="center" color="#dddddd" width="2.4" position="0 -0.3 0.01" line-height="60"></a-text>
   </a-entity>
 
+  <!-- PANEL 2: EQUIPAMIENTO (Derecha) -->
+  <a-entity id="panel-equipamiento" position="1.5 1.6 -2.6" rotation="0 -15 0" scale="0.01 0.01 0.01" visible="false">
+    <a-plane width="2.6" height="2.4" color="#000000" opacity="0.6" material="shader:flat"></a-plane>
+    <a-plane width="2.65" height="2.45" color="#4455aa" material="shader:flat; emissive:#4455aa; emissiveIntensity:0.5" position="0 0 -0.01"></a-plane>
+    
+    <a-text value="¿QUE ENCONTRARAS AQUI?" align="center" color="#f1c40f" width="3.0" position="0 0.9 0.01" font="exo2bold"></a-text>
+    
+    <a-text value="Disponemos de tecnologia punta para\ntu aprendizaje:\n\n* Simuladores de Soldeo\n\n* Visores de Realidad Virtual (VR)\n\n* Realidad Mixta (XR)\n\n* Un potente escaner 3D\n\n... ¡Y esperamos que pronto\nalguna cosa mas!" align="left" color="#ffffff" width="2.4" position="-1.1 0.0 0.01" line-height="55"></a-text>
+  </a-entity>
+
+  <!-- Cámara y Controles VR -->
   <a-entity id="rig">
     <a-camera position="0 1.6 0" look-controls="pointerLockEnabled: false" wasd-controls>
       <a-entity cursor="rayOrigin: mouse" raycaster="objects: .interactable"></a-entity>
     </a-camera>
+    
     <a-entity laser-controls="hand:left" raycaster="objects: .interactable; far:10"></a-entity>
     <a-entity laser-controls="hand:right" raycaster="objects: .interactable; far:10"></a-entity>
-    <a-entity hand-tracking-controls="hand:left"></a-entity>
-    <a-entity hand-tracking-controls="hand:right"></a-entity>
   </a-entity>
 
 </a-scene>
@@ -219,9 +208,13 @@
   function iniciarReproductorMP3() {
     if (musicaIniciada) return;
     musicaIniciada = true;
+    
     const audioFondo = document.getElementById('musica-fondo');
     audioFondo.volume = 0.6; 
-    audioFondo.play().catch(e => console.log("Autoplay bloqueado hasta interacción"));
+    
+    audioFondo.play().catch(function(error) {
+      console.log("Esperando interacción para audio...");
+    });
   }
 
   function crearEstrellas() {
@@ -239,9 +232,11 @@
         y: radioEsfera * Math.cos(p),
         z: radioEsfera * Math.sin(p) * Math.sin(t)
       });
+      
       estrella.setAttribute('radius', 0.015 + Math.random() * 0.04);
       const brillo = Math.floor(180 + Math.random() * 75);
       estrella.setAttribute('material', `color:rgb(${brillo},${brillo},${brillo}); emissive:rgb(${brillo},${brillo},${brillo}); emissiveIntensity:1; shader:flat`);
+      
       contenedorEstrellas.appendChild(estrella);
     }
 
@@ -265,26 +260,69 @@
     }
   }
 
-  function lanzarSecuencia() {
-    const cartel = document.getElementById('aula-ateca');
+  function mostrarPanelesInfo() {
     const panelInfo = document.getElementById('panel-info');
-    
-    // 1. Llega el cartel principal
-    cartel.setAttribute('visible', 'true');
-    cartel.setAttribute('animation__llega', 'property: position; from: 0 1.8 -30; to: 0 1.8 -2.8; dur: 6000; easing: easeOutCubic');
-    cartel.setAttribute('animation__escala', 'property: scale; from: 0.05 0.05 0.05; to: 1 1 1; dur: 6000; easing: easeOutCubic');
-    
-    // 2. A los 10 segundos, el cartel principal se encoge y desaparece hacia atrás
-    setTimeout(() => {
-      cartel.setAttribute('animation__desaparece_pos', 'property: position; to: 0 1.8 -10; dur: 2000; easing: easeInBack');
-      cartel.setAttribute('animation__desaparece_esc', 'property: scale; to: 0 0 0; dur: 2000; easing: easeInBack');
-    }, 10000);
+    const panelEquipamiento = document.getElementById('panel-equipamiento');
 
-    // 3. A los 11.5 segundos, aparece el panel de información con un efecto elástico
+    panelInfo.setAttribute('visible', 'true');
+    panelEquipamiento.setAttribute('visible', 'true');
+
+    panelInfo.setAttribute('animation__escala', {
+      property: 'scale',
+      from: '0.01 0.01 0.01',
+      to: '1 1 1',
+      dur: 2000,
+      easing: 'easeOutElastic'
+    });
+
+    panelEquipamiento.setAttribute('animation__escala', {
+      property: 'scale',
+      from: '0.01 0.01 0.01',
+      to: '1 1 1',
+      dur: 2000,
+      delay: 500,
+      easing: 'easeOutElastic'
+    });
+  }
+
+  function lanzarAulaAteca() {
+    const cartel = document.getElementById('aula-ateca');
+    cartel.setAttribute('visible', 'true');
+
+    cartel.setAttribute('animation__llega', {
+      property: 'position',
+      from: '0 1.8 -30',
+      to: '0 1.8 -2.8',
+      dur: 6000,
+      easing: 'easeOutCubic'
+    });
+    
+    cartel.setAttribute('animation__escala', {
+      property: 'scale',
+      from: '0.05 0.05 0.05',
+      to: '1 1 1',
+      dur: 6000,
+      easing: 'easeOutCubic'
+    });
+    
     setTimeout(() => {
-      panelInfo.setAttribute('visible', 'true');
-      panelInfo.setAttribute('animation__aparece', 'property: scale; from: 0 0 0; to: 1 1 1; dur: 1500; easing: easeOutElastic');
-    }, 11500);
+      cartel.setAttribute('animation__se_va', {
+        property: 'position',
+        from: '0 1.8 -2.8',
+        to: '0 1.8 -30',
+        dur: 2000,
+        easing: 'easeInCubic'
+      });
+      cartel.setAttribute('animation__escala_baja', {
+        property: 'scale',
+        from: '1 1 1',
+        to: '0.05 0.05 0.05',
+        dur: 2000,
+        easing: 'easeInCubic'
+      });
+    }, 9000);
+
+    setTimeout(mostrarPanelesInfo, 10000);
   }
 
   function iniciar() {
@@ -293,13 +331,13 @@
     setTimeout(() => { pantalla.style.display = 'none'; }, 1000);
     
     iniciarReproductorMP3();
-    setTimeout(lanzarSecuencia, 3500);
+    setTimeout(lanzarAulaAteca, 2000);
   }
 
   document.querySelector('a-scene').addEventListener('enter-vr', () => {
     document.getElementById('pantalla-inicio').style.display = 'none';
     iniciarReproductorMP3();
-    setTimeout(lanzarSecuencia, 3500);
+    setTimeout(lanzarAulaAteca, 2000);
   });
 
   document.querySelector('a-scene').addEventListener('loaded', crearEstrellas);
