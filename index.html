@@ -4,10 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bienvenido - Aula ATECA</title>
   
-  <!-- Script principal de A-Frame -->
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  
-  <!-- Fuentes elegantes -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
   
   <style>
@@ -33,7 +30,6 @@
       transition: opacity 1s ease-in-out;
     }
 
-    /* Fondo cósmico animado para la UI */
     #pantalla-inicio::before {
       content: '';
       position: absolute;
@@ -103,23 +99,18 @@
   </style>
 
   <script>
-    // Registramos un componente personalizado para que las palabras reaccionen
     AFRAME.registerComponent('palabra-interactiva', {
       init: function () {
         var el = this.el;
         var colorOriginal = el.getAttribute('color');
 
-        // Al apuntar con el láser o ratón
         el.addEventListener('mouseenter', function () {
-          el.setAttribute('color', '#f1c40f'); // Cambia a dorado
-          // Animación de escala (crece un poco)
+          el.setAttribute('color', '#f1c40f');
           el.setAttribute('animation__escala', 'property: scale; to: 1.3 1.3 1.3; dur: 200; easing: easeOutQuad');
         });
 
-        // Al quitar el láser o ratón
         el.addEventListener('mouseleave', function () {
-          el.setAttribute('color', colorOriginal); // Vuelve a su color
-          // Animación de escala (vuelve a la normalidad)
+          el.setAttribute('color', colorOriginal);
           el.setAttribute('animation__escala', 'property: scale; to: 1 1 1; dur: 200; easing: easeOutQuad');
         });
       }
@@ -136,30 +127,22 @@
   <button id="btn-entrar" onclick="iniciar()">ENTRAR</button>
 </div>
 
+<!-- EL AUDIO FUERA DE A-ASSETS PARA QUE NO BLOQUEE LA PANTALLA -->
+<audio id="musica-fondo" src="./ATECA1.mp3" preload="auto" loop></audio>
+
 <a-scene renderer="alpha:false;antialias:true;" background="color:#000005" fog="type: exponential; color: #000010; density: 0.04" webxr="optionalFeatures: hit-test,local-floor,passthrough;">
   
-  <a-assets>
-    <!-- AQUÍ ESTÁ TU REPRODUCTOR MP3 CONFIGURADO CON ATECA1.mp3 -->
-    <audio id="musica-fondo" src="./ATECA1.mp3" preload="auto" loop></audio>
-  </a-assets>
-
   <a-sky color="#000005"></a-sky>
   
-  <!-- Suelo sutil para evitar mareos en VR (da referencia espacial) -->
   <a-cylinder radius="30" height="0.01" position="0 0 0" color="#1a1a3a" opacity="0.1" material="shader: flat;"></a-cylinder>
   <a-ring radius-inner="2" radius-outer="2.05" position="0 0.01 0" rotation="-90 0 0" color="#4455aa" opacity="0.3"></a-ring>
   
-  <!-- Iluminación ambiental para dar volumen -->
   <a-light type="ambient" color="#111122"></a-light>
   <a-light type="point" position="0 3 0" color="#4455aa" intensity="0.4"></a-light>
 
   <a-entity id="estrellas"></a-entity>
   <a-entity id="particulas-magicas"></a-entity>
 
-  <!-- ══════════════════════════════════════ -->
-  <!-- 30 PALABRAS — concentradas en 2x2m     -->
-  <!-- Añadida la clase "interactable" y el componente "palabra-interactiva" -->
-  <!-- ══════════════════════════════════════ -->
   <a-entity id="nube-palabras">
     <a-text value="Bienvenido/a"   class="interactable" palabra-interactiva position=" 0.0  1.7 -1.8" color="#ffffff" width="3.2" align="center" animation="property:rotation; from:0 0 0;    to:12 360 8;   loop:true; dur:18000; easing:linear"></a-text>
     <a-text value="Welcome"        class="interactable" palabra-interactiva position=" 1.1  2.1 -1.4" color="#f0f0f0" width="2.6" align="center" animation="property:rotation; from:5 0 -8;   to:5 -360 -8;  loop:true; dur:22000; easing:linear"></a-text>
@@ -193,35 +176,35 @@
     <a-text value="ยินดีต้อนรับ"   class="interactable" palabra-interactiva position=" 0.0  1.0 -1.9" color="#ffffff" width="2.4" align="center" animation="property:rotation; from:-8 0 -8;  to:-8 360 -8;  loop:true; dur:29000; easing:linear"></a-text>
   </a-entity>
 
-  <!-- ══════════════════════════════════════ -->
-  <!-- AULA ATECA — llega desde el fondo      -->
-  <!-- ══════════════════════════════════════ -->
   <a-entity id="aula-ateca" position="0 1.8 -30" visible="false">
-    <!-- Fondo semitransparente con brillo -->
     <a-plane width="5.4" height="2.2" color="#000000" opacity="0.6" material="shader:flat" position="0 0 -0.06"></a-plane>
-    
-    <!-- Luces que acompañan al cartel -->
     <a-light type="point" color="#f1c40f" intensity="1" distance="6" position="0 0 0.5"></a-light>
-
-    <!-- Línea dorada arriba -->
     <a-plane width="5.0" height="0.03" color="#f1c40f" material="shader:flat; emissive:#f1c40f; emissiveIntensity:2" position="0 0.9 0"></a-plane>
-    <!-- Línea dorada abajo -->
     <a-plane width="5.0" height="0.03" color="#f1c40f" material="shader:flat; emissive:#f1c40f; emissiveIntensity:2" position="0 -0.9 0"></a-plane>
     
-    <!-- "aula" en blanco -->
     <a-text value="aula" align="center" color="#ffffff" width="6.0" position="0 0.35 0" font="exo2bold"></a-text>
-    <!-- "ATECA" en amarillo brillante -->
     <a-text value="ATECA" align="center" color="#f1c40f" width="10.5" position="0 -0.30 0" font="exo2bold" material="shader:flat; emissive:#f1c40f; emissiveIntensity:0.5"></a-text>
   </a-entity>
 
-  <!-- Cámara y Controles VR (Modificados para permitir interacción) -->
+  <a-entity id="panel-info" position="0 1.8 -2.8" visible="false" scale="0 0 0">
+    <!-- Fondo de cristal oscuro -->
+    <a-plane width="4.5" height="2.8" color="#000011" opacity="0.8" material="shader:flat" position="0 0 -0.05"></a-plane>
+    <!-- Borde sutil -->
+    <a-plane width="4.54" height="2.84" color="#4455aa" opacity="0.3" material="shader:flat" position="0 0 -0.06"></a-plane>
+
+    <!-- AQUÍ IRA TU LOGOTIPO: Cambia logo-centro.png por el nombre de tu archivo -->
+    <a-image src="./logo-centro.png" position="0 0.9 0" width="1.2" height="0.6"></a-image>
+
+    <!-- Texto Explicativo -->
+    <a-text value="¿Que son las Aulas ATECA?\n\nSon espacios destinados a impulsar la innovacion,\nla digitalizacion y el emprendimiento dentro de la\nFormacion Profesional.\n\nAqui, el aprendizaje se conecta con la realidad del\nsector productivo, usando las ultimas tecnologias.\n\n¡Adentrate y disfruta de esta experiencia inmersiva!" 
+            align="center" color="#e0e0e0" width="3.8" position="0 -0.3 0" wrap-count="50" line-height="60">
+    </a-text>
+  </a-entity>
+
   <a-entity id="rig">
-    <!-- Añadido cursor para que funcione el hover con el ratón en PC -->
     <a-camera position="0 1.6 0" look-controls="pointerLockEnabled: false" wasd-controls>
       <a-entity cursor="rayOrigin: mouse" raycaster="objects: .interactable"></a-entity>
     </a-camera>
-    
-    <!-- Mandos de Quest configurados para interactuar solo con las palabras -->
     <a-entity laser-controls="hand:left" raycaster="objects: .interactable; far:10"></a-entity>
     <a-entity laser-controls="hand:right" raycaster="objects: .interactable; far:10"></a-entity>
     <a-entity hand-tracking-controls="hand:left"></a-entity>
@@ -236,22 +219,15 @@
   function iniciarReproductorMP3() {
     if (musicaIniciada) return;
     musicaIniciada = true;
-    
-    // Obtenemos el elemento de audio HTML5
     const audioFondo = document.getElementById('musica-fondo');
-    audioFondo.volume = 0.6; // Ajusta el volumen aquí (0.0 a 1.0)
-    
-    // Reproducir
-    audioFondo.play().catch(function(error) {
-      console.log("El navegador bloqueó el autoplay. El usuario debe interactuar primero.");
-    });
+    audioFondo.volume = 0.6; 
+    audioFondo.play().catch(e => console.log("Autoplay bloqueado hasta interacción"));
   }
 
   function crearEstrellas() {
     const contenedorEstrellas = document.getElementById('estrellas');
     const contenedorParticulas = document.getElementById('particulas-magicas');
 
-    // Estrellas lejanas
     for (let i = 0; i < 250; i++) {
       const estrella = document.createElement('a-sphere');
       const radioEsfera = 18 + Math.random() * 10;
@@ -263,15 +239,12 @@
         y: radioEsfera * Math.cos(p),
         z: radioEsfera * Math.sin(p) * Math.sin(t)
       });
-      
       estrella.setAttribute('radius', 0.015 + Math.random() * 0.04);
       const brillo = Math.floor(180 + Math.random() * 75);
       estrella.setAttribute('material', `color:rgb(${brillo},${brillo},${brillo}); emissive:rgb(${brillo},${brillo},${brillo}); emissiveIntensity:1; shader:flat`);
-      
       contenedorEstrellas.appendChild(estrella);
     }
 
-    // Partículas mágicas flotantes de cerca (AHORA CON LATIDO)
     for (let i = 0; i < 35; i++) {
       const particula = document.createElement('a-sphere');
       const x = (Math.random() - 0.5) * 12;
@@ -284,65 +257,49 @@
       const color = Math.random() > 0.5 ? '#88aaff' : '#f1c40f';
       particula.setAttribute('material', `color:${color}; emissive:${color}; emissiveIntensity:0.5; shader:flat; transparent:true; opacity: 0.8`);
       
-      // Movimiento
       particula.setAttribute('animation__y', `property: position.y; from: ${y}; to: ${y + 1.5}; loop: true; dir: alternate; dur: ${10000 + Math.random() * 10000}; easing: easeInOutSine`);
       particula.setAttribute('animation__x', `property: position.x; from: ${x}; to: ${x + 0.5}; loop: true; dir: alternate; dur: ${8000 + Math.random() * 8000}; easing: easeInOutSine`);
-      
-      // Animación de latido (opacidad) para darle más vida
       particula.setAttribute('animation__opacidad', `property: components.material.material.opacity; from: 0.2; to: 0.9; loop: true; dir: alternate; dur: ${2000 + Math.random() * 3000}; easing: easeInOutSine`);
 
       contenedorParticulas.appendChild(particula);
     }
   }
 
-  function lanzarAulaAteca() {
+  function lanzarSecuencia() {
     const cartel = document.getElementById('aula-ateca');
+    const panelInfo = document.getElementById('panel-info');
+    
+    // 1. Llega el cartel principal
     cartel.setAttribute('visible', 'true');
-
-    cartel.setAttribute('animation__llega', {
-      property: 'position',
-      from: '0 1.8 -30',
-      to: '0 1.8 -2.8',
-      dur: 7000,
-      easing: 'easeOutCubic'
-    });
+    cartel.setAttribute('animation__llega', 'property: position; from: 0 1.8 -30; to: 0 1.8 -2.8; dur: 6000; easing: easeOutCubic');
+    cartel.setAttribute('animation__escala', 'property: scale; from: 0.05 0.05 0.05; to: 1 1 1; dur: 6000; easing: easeOutCubic');
     
-    cartel.setAttribute('animation__escala', {
-      property: 'scale',
-      from: '0.05 0.05 0.05',
-      to: '1 1 1',
-      dur: 7000,
-      easing: 'easeOutCubic'
-    });
-    
+    // 2. A los 10 segundos, el cartel principal se encoge y desaparece hacia atrás
     setTimeout(() => {
-      cartel.setAttribute('animation__flota', {
-        property: 'position',
-        from: '0 1.8 -2.8',
-        to: '0 2.05 -2.8',
-        dur: 3500,
-        direction: 'alternate',
-        loop: true,
-        easing: 'easeInOutSine'
-      });
-    }, 7500);
+      cartel.setAttribute('animation__desaparece_pos', 'property: position; to: 0 1.8 -10; dur: 2000; easing: easeInBack');
+      cartel.setAttribute('animation__desaparece_esc', 'property: scale; to: 0 0 0; dur: 2000; easing: easeInBack');
+    }, 10000);
+
+    // 3. A los 11.5 segundos, aparece el panel de información con un efecto elástico
+    setTimeout(() => {
+      panelInfo.setAttribute('visible', 'true');
+      panelInfo.setAttribute('animation__aparece', 'property: scale; from: 0 0 0; to: 1 1 1; dur: 1500; easing: easeOutElastic');
+    }, 11500);
   }
 
-  // ── Iniciar experiencia ───────────────────────────────────────────────
   function iniciar() {
     const pantalla = document.getElementById('pantalla-inicio');
     pantalla.style.opacity = '0';
     setTimeout(() => { pantalla.style.display = 'none'; }, 1000);
     
     iniciarReproductorMP3();
-    setTimeout(lanzarAulaAteca, 3500);
+    setTimeout(lanzarSecuencia, 3500);
   }
 
-  // Quest 3 — arrancar al entrar en VR
   document.querySelector('a-scene').addEventListener('enter-vr', () => {
     document.getElementById('pantalla-inicio').style.display = 'none';
     iniciarReproductorMP3();
-    setTimeout(lanzarAulaAteca, 3500);
+    setTimeout(lanzarSecuencia, 3500);
   });
 
   document.querySelector('a-scene').addEventListener('loaded', crearEstrellas);
