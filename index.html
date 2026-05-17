@@ -88,8 +88,11 @@
           let angleDeg = index * (360 / numCards);
           const angleRad = angleDeg * (Math.PI / 180);
           
-          const x = radius * Math.sin(angleRad);
-          const z = -radius * Math.cos(angleRad);
+          // CORRECCIÓN MATEMÁTICA CRÍTICA:
+          // .toFixed(3) redondea el número y evita la notación científica (ej. 1.22e-16)
+          // que provocaba el desplazamiento visual de la tarjeta 6 a 180 grados.
+          const x = (radius * Math.sin(angleRad)).toFixed(3);
+          const z = (-radius * Math.cos(angleRad)).toFixed(3);
           const animDelay = Math.random() * 1000;
 
           htmlContent += `
