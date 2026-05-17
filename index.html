@@ -9,6 +9,40 @@
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 
   <script>
+    // --- LÓGICA DE CONTROL DE MÚSICA ---
+    AFRAME.registerComponent('audio-controller', {
+      init: function() {
+        this.audioEl = document.getElementById('bgMusic');
+        this.isPlaying = false;
+        
+        const hitBox = this.el.querySelector('.interactable');
+        const textEl = this.el.querySelector('a-text');
+
+        // Efectos visuales al apuntar al botón
+        hitBox.addEventListener('mouseenter', () => {
+          this.el.setAttribute('animation__scale', 'property: scale; to: 1.05 1.05 1.05; dur: 200');
+        });
+        hitBox.addEventListener('mouseleave', () => {
+          this.el.setAttribute('animation__scale', 'property: scale; to: 1 1 1; dur: 200');
+        });
+
+        // Alternar Música ON / OFF
+        hitBox.addEventListener('click', () => {
+          if (this.isPlaying) {
+            this.audioEl.pause();
+            textEl.setAttribute('value', 'Audio: OFF (Haz clic)');
+            textEl.setAttribute('color', '#f1c40f'); // Amarillo
+          } else {
+            this.audioEl.play();
+            textEl.setAttribute('value', 'Audio: ON');
+            textEl.setAttribute('color', '#2ecc71'); // Verde
+          }
+          this.isPlaying = !this.isPlaying;
+        });
+      }
+    });
+
+    // --- LÓGICA DE VOLTEO DE TARJETAS ---
     AFRAME.registerComponent('flashcard-logic', {
       init: function () {
         this.isFlipped = false;
@@ -23,19 +57,18 @@
            this.el.setAttribute('animation__scale', 'property: scale; to: 1 1 1; dur: 200; easing: easeOutQuad');
         });
 
-        // Efecto Click: Voltear tarjeta de forma más lenta y majestuosa
+        // Efecto Click: Voltear tarjeta
         hitBox.addEventListener('click', () => {
           this.isFlipped = !this.isFlipped;
           const rotY = this.isFlipped ? 180 : 0;
-          // Incrementamos la duración a 1200ms y cambiamos el easing a 'easeInOutCubic' para un giro suave
           this.el.setAttribute('animation__flip', `property: rotation; to: 0 ${rotY} 0; dur: 1200; easing: easeInOutCubic`);
         });
       }
     });
 
+    // --- LÓGICA GENERADORA DEL CÍRCULO PERFECTO ---
     AFRAME.registerComponent('flashcard-board-generator', {
       init: function() {
-        // Generamos dinámicamente las 10 tarjetas (20 caras) en un anillo 360º
         const cardsData = [];
         for (let i = 1; i <= 10; i++) {
           let num = i.toString().padStart(2, '0'); // Formato: 01, 02... 10
@@ -46,33 +79,26 @@
         }
 
         let htmlContent = '';
-        const radius = 4.0; // Distancia de 4 metros al usuario
+        const radius = 4.0; // Distancia exacta del usuario (Círculo perfecto)
         const numCards = 10;
-        const y = 2.0; // Altura única para todo el anillo (a la altura de los ojos)
+        const y = 2.0; 
 
         cardsData.forEach((data, index) => {
-          // Dividimos los 360º entre las 10 tarjetas (36 grados cada una)
+          // Separación matemáticamente equidistante (36 grados)
           let angleDeg = index * (360 / numCards);
-          
           const angleRad = angleDeg * (Math.PI / 180);
           
           const x = radius * Math.sin(angleRad);
           const z = -radius * Math.cos(angleRad);
           const animDelay = Math.random() * 1000;
 
-          // Construimos el HTML de cada tarjeta usando a-image
           htmlContent += `
             <a-entity position="${x} ${y} ${z}" rotation="0 ${-angleDeg} 0" 
                       animation__float="property: position; to: ${x} ${y + 0.15} ${z}; dir: alternate; loop: true; dur: 3000; delay: ${animDelay}; easing: easeInOutSine">
               
               <a-entity flashcard-logic>
-                <!-- Cara Frontal (Imagen PNG) -->
                 <a-image src="${data.front}" width="1.6" height="1" position="0 0 0.01"></a-image>
-
-                <!-- Cara Trasera (Imagen PNG) -->
                 <a-image src="${data.back}" width="1.6" height="1" position="0 0 -0.01" rotation="0 180 0"></a-image>
-
-                <!-- Hitbox invisible para detectar clics y láser -->
                 <a-box class="interactable" width="1.6" height="1" depth="0.1" material="visible: false"></a-box>
               </a-entity>
             </a-entity>
@@ -88,6 +114,11 @@
 
 <a-scene renderer="alpha:false;antialias:true;" background="color:#050814" fog="type: exponential; color: #050814; density: 0.05" webxr="optionalFeatures: hit-test,local-floor,passthrough;">
   
+  <!-- Carga de Archivos (Audio) -->
+  <a-assets>
+    <audio id="bgMusic" src="ATECA1.mp3" loop preload="auto"></audio>
+  </a-assets>
+
   <a-light type="ambient" color="#1a2b4c"></a-light>
   <a-light type="point" position="0 3 0" color="#7dd3fc" intensity="0.5"></a-light>
   <a-light type="point" position="0 0.5 2" color="#ffffff" intensity="0.2"></a-light>
@@ -96,9 +127,17 @@
   <a-cylinder radius="30" height="0.01" position="0 0 0" color="#0b1020" material="shader: flat; roughness: 1"></a-cylinder>
   <a-ring radius-inner="3.4" radius-outer="3.6" position="0 0.01 0" rotation="-90 0 0" color="#7dd3fc" opacity="0.3"></a-ring>
 
-  <!-- Título Principal 3D -->
-  <a-text value="Nuestra Aula ATECA" align="center" position="0 3.8 -4" color="#f1c40f" width="8"></a-text>
-  <a-text value="Apunta y haz clic para voltear las tarjetas" align="center" position="0 3.4 -4" color="#888888" width="4"></a-text>
+  <!-- Textos Principales y Botón de Audio -->
+  <a-entity position="0 0 -4">
+    <a-text value="Nuestra Aula ATECA" align="center" position="0 3.8 0" color="#f1c40f" width="8"></a-text>
+    <a-text value="Apunta y haz clic para voltear las tarjetas" align="center" position="0 3.4 0" color="#888888" width="4"></a-text>
+    
+    <!-- Botón de Mute/Play -->
+    <a-entity audio-controller position="0 2.9 0">
+      <a-plane class="interactable" width="2" height="0.4" color="#111" material="shader: flat; opacity: 0.8"></a-plane>
+      <a-text value="Audio: OFF (Haz clic)" align="center" position="0 0 0.01" color="#f1c40f" scale="0.8 0.8 0.8"></a-text>
+    </a-entity>
+  </a-entity>
 
   <!-- Contenedor donde se generan las Flashcards dinámicas -->
   <a-entity id="flashcard-board" flashcard-board-generator></a-entity>
