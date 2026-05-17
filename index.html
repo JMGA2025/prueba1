@@ -35,44 +35,35 @@
 
     AFRAME.registerComponent('flashcard-board-generator', {
       init: function() {
-        // Datos de las tarjetas referenciando tus imágenes PNG
-        const cardsData = [
-          { front: "panel-01-a.png", back: "panel-01-b.png" },
-          { front: "panel-02-a.png", back: "panel-02-b.png" },
-          { front: "panel-03-a.png", back: "panel-03-b.png" },
-          { front: "panel-04-a.png", back: "panel-04-b.png" },
-          { front: "panel-05-a.png", back: "panel-05-b.png" }
-        ];
+        // Generamos dinámicamente las 10 tarjetas (20 caras) en un anillo 360º
+        const cardsData = [];
+        for (let i = 1; i <= 10; i++) {
+          let num = i.toString().padStart(2, '0'); // Formato: 01, 02... 10
+          cardsData.push({ 
+            front: `panel-${num}-a.png`, 
+            back: `panel-${num}-b.png` 
+          });
+        }
 
         let htmlContent = '';
-        const radius = 3.5;
-        const heights = [2.2, 0.8];  // 2 filas
+        const radius = 4.0; // Distancia de 4 metros al usuario
+        const numCards = 10;
+        const y = 2.0; // Altura única para todo el anillo (a la altura de los ojos)
 
         cardsData.forEach((data, index) => {
-          let row, angleDeg;
-          
-          // Distribución balanceada para 5 paneles: 3 arriba, 2 abajo centrados
-          if (index < 3) {
-            row = 0;
-            const anglesRow0 = [-35, 0, 35];
-            angleDeg = anglesRow0[index];
-          } else {
-            row = 1;
-            const anglesRow1 = [-17.5, 17.5];
-            angleDeg = anglesRow1[index - 3];
-          }
+          // Dividimos los 360º entre las 10 tarjetas (36 grados cada una)
+          let angleDeg = index * (360 / numCards);
           
           const angleRad = angleDeg * (Math.PI / 180);
           
           const x = radius * Math.sin(angleRad);
           const z = -radius * Math.cos(angleRad);
-          const y = heights[row];
           const animDelay = Math.random() * 1000;
 
           // Construimos el HTML de cada tarjeta usando a-image
           htmlContent += `
             <a-entity position="${x} ${y} ${z}" rotation="0 ${-angleDeg} 0" 
-                      animation__float="property: position; to: ${x} ${y + 0.1} ${z}; dir: alternate; loop: true; dur: 3000; delay: ${animDelay}; easing: easeInOutSine">
+                      animation__float="property: position; to: ${x} ${y + 0.15} ${z}; dir: alternate; loop: true; dur: 3000; delay: ${animDelay}; easing: easeInOutSine">
               
               <a-entity flashcard-logic>
                 <!-- Cara Frontal (Imagen PNG) -->
