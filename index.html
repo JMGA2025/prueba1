@@ -9,6 +9,42 @@
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 
   <script>
+    // --- LÓGICA GENERADORA DE BURBUJAS (Efecto Mágico) ---
+    AFRAME.registerComponent('bubbles-system', {
+      init: function() {
+        let htmlContent = '';
+        // Colores extraídos de la paleta de tus tarjetas
+        const colors = ['#0ea5e9', '#10b981', '#a855f7', '#f59e0b', '#f43f5e', '#06b6d4']; 
+        
+        for(let i = 0; i < 70; i++){
+          // Posición aleatoria en un radio de 16 metros
+          let x = (Math.random() - 0.5) * 16;
+          let y = Math.random() * 7;
+          let z = (Math.random() - 0.5) * 16;
+          
+          // Despejamos el centro exacto para no agobiar al usuario
+          if (Math.abs(x) < 2.5 && Math.abs(z) < 2.5) { 
+            x += (x > 0 ? 3 : -3); 
+            z += (z > 0 ? 3 : -3); 
+          }
+
+          let color = colors[Math.floor(Math.random() * colors.length)];
+          let radius = 0.03 + Math.random() * 0.07;
+          let dur = 4000 + Math.random() * 6000;
+          let delay = Math.random() * -5000; // Desfase para que no floten a la vez
+
+          // Construimos cada burbuja con efecto cristalino (transparente, rugosidad baja, metalizado)
+          htmlContent += `
+            <a-sphere position="${x} ${y} ${z}" radius="${radius}" 
+             material="color: ${color}; transparent: true; opacity: 0.35; metalness: 0.3; roughness: 0.1"
+             animation="property: position; to: ${x} ${y + 0.8} ${z}; dir: alternate; loop: true; dur: ${dur}; delay: ${delay}; easing: easeInOutSine">
+            </a-sphere>
+          `;
+        }
+        this.el.innerHTML = htmlContent;
+      }
+    });
+
     // --- LÓGICA DE CONTROL DE MÚSICA ---
     AFRAME.registerComponent('audio-controller', {
       init: function() {
@@ -88,9 +124,6 @@
           let angleDeg = index * (360 / numCards);
           const angleRad = angleDeg * (Math.PI / 180);
           
-          // CORRECCIÓN MATEMÁTICA CRÍTICA:
-          // .toFixed(3) redondea el número y evita la notación científica (ej. 1.22e-16)
-          // que provocaba el desplazamiento visual de la tarjeta 6 a 180 grados.
           const x = (radius * Math.sin(angleRad)).toFixed(3);
           const z = (-radius * Math.cos(angleRad)).toFixed(3);
           const animDelay = Math.random() * 1000;
@@ -100,7 +133,6 @@
                       animation__float="property: position; to: ${x} ${y + 0.15} ${z}; dir: alternate; loop: true; dur: 3000; delay: ${animDelay}; easing: easeInOutSine">
               
               <a-entity flashcard-logic>
-                <!-- npot: true fuerza a mantener la nitidez original de la imagen -->
                 <a-image src="${data.front}" width="1.6" height="1" position="0 0 0.01" material="npot: true"></a-image>
                 <a-image src="${data.back}" width="1.6" height="1" position="0 0 -0.01" rotation="0 180 0" material="npot: true"></a-image>
                 <a-box class="interactable" width="1.6" height="1" depth="0.1" material="visible: false"></a-box>
@@ -116,7 +148,6 @@
 </head>
 <body>
 
-<!-- colorManagement: true asegura que los colores de las tarjetas no se vean lavados -->
 <a-scene renderer="alpha:false; antialias:true; colorManagement:true;" background="color:#050814" fog="type: exponential; color: #050814; density: 0.05" webxr="optionalFeatures: hit-test,local-floor,passthrough;">
   
   <!-- Carga de Archivos (Audio) -->
@@ -130,25 +161,27 @@
 
   <!-- Decoración del Entorno -->
   <a-cylinder radius="30" height="0.01" position="0 0 0" color="#0b1020" material="shader: flat; roughness: 1"></a-cylinder>
-  <!-- Adaptamos el anillo luminoso al nuevo radio de las tarjetas -->
   <a-ring radius-inner="2.6" radius-outer="2.8" position="0 0.01 0" rotation="-90 0 0" color="#7dd3fc" opacity="0.3"></a-ring>
 
-  <!-- ORBITADOR: Mueve la foto de un lado a otro (Efecto péndulo flotante) -->
-  <a-entity animation="property: rotation; from: 0 -60 0; to: 0 60 0; dir: alternate; loop: true; dur: 20000; easing: easeInOutSine">
+  <!-- GENERADOR DE BURBUJAS DE COLORES -->
+  <a-entity bubbles-system></a-entity>
+
+  <!-- ORBITADOR: Satélite 360 grados -->
+  <!-- 'linear' es clave para que la órbita no frene ni acelere, giro continuo de 60 segundos -->
+  <a-entity animation="property: rotation; from: 0 0 0; to: 0 360 0; loop: true; dur: 60000; easing: linear">
     
-    <!-- FOTO FLOTANTE DE LA ACTIVIDAD (Sin marco, imagen limpia) -->
+    <!-- FOTO FLOTANTE DE LA ACTIVIDAD -->
     <a-entity position="0 3.2 -4.0" 
               animation__float="property: position; to: 0 3.5 -4.0; dir: alternate; loop: true; dur: 3500; easing: easeInOutSine" 
               animation__rot="property: rotation; from: 0 -10 -5; to: 0 10 5; dir: alternate; loop: true; dur: 4500; easing: easeInOutSine">
       <a-image src="foto_aula.png" width="2.4" height="1.35" position="0 0 0" material="npot: true"></a-image>
     </a-entity>
-
   </a-entity>
 
-  <!-- Textos Principales y Botón de Audio (Acercados a z = -2.7 para que queden justo sobre la tarjeta central) -->
+  <!-- Textos Principales y Botón de Audio -->
   <a-entity position="0 0 -2.7">
-    <!-- LOGOTIPO DEL CENTRO -->
-    <a-image src="LOGO.jpg" width="0.7" height="0.7" position="-2.3 3.2 0" material="npot: true"></a-image>
+    <!-- LOGOTIPO DEL CENTRO (Ahora con rotation="0 40 0" para que te mire de frente) -->
+    <a-image src="LOGO.jpg" width="0.7" height="0.7" position="-2.3 3.2 0" rotation="0 40 0" material="npot: true"></a-image>
     
     <a-text value="Nuestra Aula ATECA" align="center" position="0 3.2 0" color="#f1c40f" width="8"></a-text>
     <a-text value="Apunta y haz clic para voltear las tarjetas" align="center" position="0 2.8 0" color="#888888" width="4"></a-text>
