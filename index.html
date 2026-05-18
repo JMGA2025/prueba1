@@ -133,8 +133,30 @@
   <!-- Adaptamos el anillo luminoso al nuevo radio de las tarjetas -->
   <a-ring radius-inner="2.6" radius-outer="2.8" position="0 0.01 0" rotation="-90 0 0" color="#7dd3fc" opacity="0.3"></a-ring>
 
+  <!-- FOTOS FLOTANTES DE LA ACTIVIDAD (Estilo Polaroid) -->
+  <!-- Foto Izquierda -->
+  <a-entity position="-3.5 2.5 -1.5" rotation="0 45 0" 
+            animation__float="property: position; to: -3.5 2.7 -1.5; dir: alternate; loop: true; dur: 4000; easing: easeInOutSine" 
+            animation__rot="property: rotation; to: 0 50 5; dir: alternate; loop: true; dur: 5000; easing: easeInOutSine">
+    <a-plane width="1.6" height="1.9" color="#ffffff" material="shader: flat"></a-plane>
+    <a-image src="foto_aula_1.jpg" width="1.4" height="1.0" position="0 0.25 0.01" material="npot: true"></a-image>
+    <a-text value="Trabajando en el Aula" align="center" position="0 -0.6 0.01" color="#333333" width="3" font="mozillavr"></a-text>
+  </a-entity>
+
+  <!-- Foto Derecha -->
+  <a-entity position="3.5 2.5 -1.5" rotation="0 -45 0" 
+            animation__float="property: position; to: 3.5 2.3 -1.5; dir: alternate; loop: true; dur: 3500; easing: easeInOutSine" 
+            animation__rot="property: rotation; to: 0 -50 -5; dir: alternate; loop: true; dur: 4500; easing: easeInOutSine">
+    <a-plane width="1.6" height="1.9" color="#ffffff" material="shader: flat"></a-plane>
+    <a-image src="foto_aula_2.jpg" width="1.4" height="1.0" position="0 0.25 0.01" material="npot: true"></a-image>
+    <a-text value="Nuestros Equipos" align="center" position="0 -0.6 0.01" color="#333333" width="3" font="mozillavr"></a-text>
+  </a-entity>
+
   <!-- Textos Principales y Botón de Audio (Acercados a z = -2.7 para que queden justo sobre la tarjeta central) -->
   <a-entity position="0 0 -2.7">
+    <!-- LOGOTIPO DEL CENTRO -->
+    <a-image src="LOGO.jpg" width="0.7" height="0.7" position="-2.3 3.2 0" material="npot: true"></a-image>
+    
     <a-text value="Nuestra Aula ATECA" align="center" position="0 3.2 0" color="#f1c40f" width="8"></a-text>
     <a-text value="Apunta y haz clic para voltear las tarjetas" align="center" position="0 2.8 0" color="#888888" width="4"></a-text>
     
