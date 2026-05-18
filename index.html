@@ -79,9 +79,9 @@
         }
 
         let htmlContent = '';
-        const radius = 4.0; // Distancia exacta del usuario (Círculo perfecto)
+        const radius = 2.8; // Círculo mucho más cerrado para mayor nitidez e inmersión
         const numCards = 10;
-        const y = 2.0; 
+        const y = 1.6; // Bajamos la altura al nivel natural de los ojos
 
         cardsData.forEach((data, index) => {
           // Separación matemáticamente equidistante (36 grados)
@@ -100,8 +100,9 @@
                       animation__float="property: position; to: ${x} ${y + 0.15} ${z}; dir: alternate; loop: true; dur: 3000; delay: ${animDelay}; easing: easeInOutSine">
               
               <a-entity flashcard-logic>
-                <a-image src="${data.front}" width="1.6" height="1" position="0 0 0.01"></a-image>
-                <a-image src="${data.back}" width="1.6" height="1" position="0 0 -0.01" rotation="0 180 0"></a-image>
+                <!-- npot: true fuerza a mantener la nitidez original de la imagen -->
+                <a-image src="${data.front}" width="1.6" height="1" position="0 0 0.01" material="npot: true"></a-image>
+                <a-image src="${data.back}" width="1.6" height="1" position="0 0 -0.01" rotation="0 180 0" material="npot: true"></a-image>
                 <a-box class="interactable" width="1.6" height="1" depth="0.1" material="visible: false"></a-box>
               </a-entity>
             </a-entity>
@@ -115,7 +116,8 @@
 </head>
 <body>
 
-<a-scene renderer="alpha:false;antialias:true;" background="color:#050814" fog="type: exponential; color: #050814; density: 0.05" webxr="optionalFeatures: hit-test,local-floor,passthrough;">
+<!-- colorManagement: true asegura que los colores de las tarjetas no se vean lavados -->
+<a-scene renderer="alpha:false; antialias:true; colorManagement:true;" background="color:#050814" fog="type: exponential; color: #050814; density: 0.05" webxr="optionalFeatures: hit-test,local-floor,passthrough;">
   
   <!-- Carga de Archivos (Audio) -->
   <a-assets>
@@ -128,17 +130,18 @@
 
   <!-- Decoración del Entorno -->
   <a-cylinder radius="30" height="0.01" position="0 0 0" color="#0b1020" material="shader: flat; roughness: 1"></a-cylinder>
-  <a-ring radius-inner="3.4" radius-outer="3.6" position="0 0.01 0" rotation="-90 0 0" color="#7dd3fc" opacity="0.3"></a-ring>
+  <!-- Adaptamos el anillo luminoso al nuevo radio de las tarjetas -->
+  <a-ring radius-inner="2.6" radius-outer="2.8" position="0 0.01 0" rotation="-90 0 0" color="#7dd3fc" opacity="0.3"></a-ring>
 
-  <!-- Textos Principales y Botón de Audio -->
-  <a-entity position="0 0 -4">
-    <a-text value="Nuestra Aula ATECA" align="center" position="0 3.8 0" color="#f1c40f" width="8"></a-text>
-    <a-text value="Apunta y haz clic para voltear las tarjetas" align="center" position="0 3.4 0" color="#888888" width="4"></a-text>
+  <!-- Textos Principales y Botón de Audio (Acercados a z = -2.7 para que queden justo sobre la tarjeta central) -->
+  <a-entity position="0 0 -2.7">
+    <a-text value="Nuestra Aula ATECA" align="center" position="0 3.2 0" color="#f1c40f" width="8"></a-text>
+    <a-text value="Apunta y haz clic para voltear las tarjetas" align="center" position="0 2.8 0" color="#888888" width="4"></a-text>
     
     <!-- Botón de Mute/Play -->
-    <a-entity audio-controller position="0 2.9 0">
-      <a-plane class="interactable" width="2" height="0.4" color="#111" material="shader: flat; opacity: 0.8"></a-plane>
-      <a-text value="Audio: OFF (Haz clic)" align="center" position="0 0 0.01" color="#f1c40f" scale="0.8 0.8 0.8"></a-text>
+    <a-entity audio-controller position="0 2.4 0">
+      <a-plane class="interactable" width="2" height="0.3" color="#111" material="shader: flat; opacity: 0.8"></a-plane>
+      <a-text value="Audio: OFF (Haz clic)" align="center" position="0 0 0.01" color="#f1c40f" scale="0.7 0.7 0.7"></a-text>
     </a-entity>
   </a-entity>
 
