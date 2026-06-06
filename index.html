@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador 180° - Meta Quest 3</title>
+    
+    <!-- Cargamos las librerías necesarias: Three.js y OrbitControls para poder arrastrar con el ratón -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #0c0f12;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+
+        /* Interfaz flotante de instrucciones en modo 2D */
+        #interfaz {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 320px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            pointer-events: auto;
+            transition: opacity 0.3s ease;
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            margin: 0 0 10px 0;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin: 0 0 12px 0;
+            color: #cbd5e1;
+        }
+
+        .nota {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            border-left: 3px solid #38bdf8;
+            padding-left: 8px;
+        }
+
+        /* Contenedor de entrada alternativa por si falla la carga automática */
+        #fallback-container {
+            margin-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+        }
+
+        .input-url {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #38bdf8;
+            background: #0f172a;
+            color: #fff;
+            font-size: 0.8rem;
+            box-sizing: border-box;
+            margin-bottom: 8px;
+        }
+
+        .btn-cargar {
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .btn-cargar:hover {
+            background: #0ea5e9;
+        }
+
+        /* Estilo personalizado para el botón de VR que genera Three.js */
+        #VRButton {
+            background: #38bdf8 !important;
+            color: #0f172a !important;
+            border: none !important;
+            font-weight: bold !important;
+            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4) !important;
+            transition: all 0.3s ease !important;
+            border-radius: 8px !important;
+            padding: 12px 24px !important;
+        }
+
+        #VRButton:hover {
+            transform: scale(1.05);
+            background: #0ea5e9 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Panel informativo para los alumnos (se oculta automáticamente en VR) -->
+    <div id="interfaz">
+        <h1>Vista Previa 180°</h1>
+        <p><strong>En PC/Móvil:</strong> Haz clic y arrastra con el ratón o desliza el dedo para mirar a tu alrededor.</p>
+        <p><strong>En Meta Quest 3:</strong> Abre esta URL en el Oculus Browser y pulsa el botón <strong>"ENTER VR"</strong> de abajo.</p>
+        <div class="nota">Detectando foto: <strong>prueba1.jpeg</strong> en la raíz.</div>
+        
+        <!-- Formulario de recuperación de fallos interactivo -->
+        <div id="fallback-container" style="display: none;">
+            <p style="color: #f87171; font-weight: bold; margin-bottom: 5px;">⚠️ Archivo local no encontrado</p>
+            <p style="font-size: 0.8rem; margin-bottom: 8px;">Pega aquí la URL directa de tu imagen de GitHub para probarla en la vista previa del chat:</p>
+            <input type="text" id="url-input" class="input-url" placeholder="https://raw.githubusercontent.com/.../prueba1.jpeg">
+            <button id="btn-cargar-url" class="btn-cargar">Cargar URL de imagen</button>
+        </div>
+    </div>
+
+    <script>
+        let escena, camara, renderizador, controles, domo180, material;
+
+        init();
+        animar();
+
+        function init() {
+            // 1. Crear la escena
+            escena = new THREE.Scene();
+
+            // Fondo espacial oscuro para que resalte la fotografía
+            escena.background = new THREE.Color(0x0a0c10);
+
+            // 2. Configurar la cámara
+            camara = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+            camara.position.set(0, 0, 0.1); // Posicionada en el centro
+
+            // 3. Renderizador y activación de WebXR (Meta Quest 3)
+            renderizador = new THREE.WebGLRenderer({ antialias: true });
+            renderizador.setPixelRatio(window.devicePixelRatio);
+            renderizador.setSize(window.innerWidth, window.innerHeight);
+            renderizador.xr.enabled = true; // Activa el soporte para visores virtuales
+            document.body.appendChild(renderizador.domElement);
+
+            // 4. Controles para explorar en plano (PC y Móvil)
+            controles = new THREE.OrbitControls(camara, renderizador.domElement);
+            controles.enableDamping = true; // Movimiento más fluido y suave
+            controles.dampingFactor = 0.05;
+            controles.rotateSpeed = -0.25;  // Invertimos la rotación para simular que giramos la cabeza por dentro
+            controles.enableZoom = false;   // Desactivamos zoom para no romper la perspectiva
+            controles.enablePan = false;    // Desactivamos desplazamiento lateral
+
+            // 5. GEOMETRÍA 180° (Domo / Semiesfera)
+            const geometria = new THREE.SphereGeometry(500, 60, 40, 0, Math.PI);
+            geometria.scale(-1, 1, 1); // Invertimos la escala para verla desde dentro
+
+            // Creamos un material base de color gris oscuro para que no esté totalmente transparente si falla la foto
+            material = new THREE.MeshBasicMaterial({ color: 0x1e293b });
+            domo180 = new THREE.Mesh(geometria, material);
+
+            // Rotamos el domo 90 grados para que el centro de la foto quede justo en frente de la cámara al iniciar
+            domo180.rotation.y = -Math.PI / 2;
+            escena.add(domo180);
+
+            // 6. CARGADOR DE TEXTURAS INTELIGENTE
+            const cargadorTextura = new THREE.TextureLoader();
+            const fallbackContainer = document.getElementById('fallback-container');
+
+            function cargarFoto(url) {
+                cargadorTextura.load(url, 
+                    function (textura) {
+                        console.log("Foto cargada con éxito desde:", url);
+                        material.map = textura;
+                        material.color.setHex(0xffffff); // Eliminamos el tono grisáceo de fondo
+                        material.needsUpdate = true;
+                        fallbackContainer.style.display = 'none'; // Escondemos el formulario de fallback si se carga correctamente
+                    },
+                    undefined,
+                    function (err) {
+                        console.warn("Fallo al intentar cargar la imagen:", url);
+                        fallbackContainer.style.display = 'block'; // Mostramos el cargador de URL alternativa
+                    }
+                );
+            }
+
+            // Intento inicial: cargar de forma relativa el archivo 'prueba1.jpeg'
+            cargarFoto('prueba1.jpeg');
+
+            // Escuchar el botón del formulario alternativo de carga
+            const btnCargar = document.getElementById('btn-cargar-url');
+            const urlInput = document.getElementById('url-input');
+
+            btnCargar.addEventListener('click', () => {
+                const urlPersonalizada = urlInput.value.trim();
+                if (urlPersonalizada !== '') {
+                    cargarFoto(urlPersonalizada);
+                }
+            });
+
+            // 7. Activar botón de Realidad Virtual oficial de Three.js
+            import('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/webxr/VRButton.js')
+                .then((modulo) => {
+                    const botonVR = modulo.VRButton.createButton(renderizador);
+                    document.body.appendChild(botonVR);
+                });
+
+            // 8. Ocultar la interfaz 2D cuando el alumno entre en modo VR
+            renderizador.xr.addEventListener('sessionstart', () => {
+                document.getElementById('interfaz').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('interfaz').style.display = 'none';
+                }, 300);
+            });
+
+            renderizador.xr.addEventListener('sessionend', () => {
+                document.getElementById('interfaz').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('interfaz').style.opacity = '1';
+                }, 50);
+            });
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function onWindowResize() {
+            camara.aspect = window.innerWidth / window.innerHeight;
+            camara.updateProjectionMatrix();
+            renderizador.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // Bucle de renderizado adaptativo para WebXR (Quest 3 renderiza a 90Hz/120Hz de forma nativa aquí)
+        function animar() {
+            renderizador.setAnimationLoop(render);
+        }
+
+        function render() {
+            // Si no estamos en VR, actualizamos los controles de arrastre del ratón
+            if (!renderizador.xr.isPresenting) {
+                controles.update();
+            }
+            renderizador.render(escena, camara);
+        }
+    </script>
+</body>
+</html>
